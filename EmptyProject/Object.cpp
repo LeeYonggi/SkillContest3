@@ -149,7 +149,9 @@ bool Object::GetPointCollision(Texture* tex1, Vector2 *p1, Vector2 p2)
 float Object::Billboarding(Vector3 p1)
 {
 	Vector3 temp = pos;
+	temp.x = pos.z;
 	temp.z = pos.y;
+	p1.x = p1.z;
 	p1.z = p1.y;
 	return GetRotateToVec3(temp, p1);
 }

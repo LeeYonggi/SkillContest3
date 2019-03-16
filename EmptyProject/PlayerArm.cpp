@@ -43,8 +43,8 @@ void PlayerArm::Update()
 		tempPos.y = pos.y + GetVec3ToRotate(rotate.z + 110).z * 1.5f;
 		tempPos.z = pos.z;
 		Vector3 tempVec3 = { 0, 0, 0 };
-		tempVec3.x = GetVec3ToRotate(rotate.z + 90).x;
-		tempVec3.y = GetVec3ToRotate(rotate.z + 90).z;
+		tempVec3.x = GetVec3ToRotate(rotate.y).x * 0.2f;
+		tempVec3.z = GetVec3ToRotate(rotate.y).z * 0.2f;
 		playerAttack[i]->AttackUpdate(tempPos, tempVec3, BULLET_STATE::BULLET_88MM);
 	}
 	frame += ELTIME * 15;
@@ -75,19 +75,20 @@ void PlayerArm::ArmInit()
 
 void PlayerArm::StateUpdate()
 {
-	if (INPUTMANAGER->KeyDown('W'))
-	{
-		playerAttack[0]->Attack();
-		armState = PLAYERARM_88MM;
-		frame = 0;
-	}
 	switch (armState)
 	{
 	case PLAYERARM_IDLE:
-
+		if (INPUTMANAGER->KeyDown('W'))
+		{
+			playerAttack[0]->Attack();
+			armState = PLAYERARM_88MM;
+			frame = 0;
+		}
 		break;
 	case PLAYERARM_88MM:
 		if (playerAttack[0]->isShootStart == false)
+			playerAttack[0]->Attack();
+		if (INPUTMANAGER->KeyDown('W'))
 			armState = PLAYERARM_IDLE;
 		break;
 	default:
