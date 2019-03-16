@@ -2,7 +2,6 @@
 #include "Bullet.h"
 
 
-
 Bullet::Bullet(Vector3 nowPos, Vector3 _moveVector, BULLET_STATE state)
 {
 	pos = nowPos;

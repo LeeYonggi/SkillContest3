@@ -1,8 +1,9 @@
 ﻿  PlayerArm.cpp
-d:\programming\pj\directx\기능대회3학년\skillcontest3\emptyproject\playerarm.cpp(39): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+d:\programming\pj\directx\기능대회3학년\skillcontest3\emptyproject\playerarm.cpp(43): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+d:\programming\pj\directx\기능대회3학년\skillcontest3\emptyproject\playerarm.cpp(106): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   코드를 생성하고 있습니다.
-  3 of 2420 functions ( 0.1%) were compiled, the rest were copied from previous compilation.
+  1 of 2420 functions (<0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+    1 functions had inline decision re-evaluated but remain unchanged
   코드를 생성했습니다.
   EmptyProject_2010.vcxproj -> D:\Programming\PJ\Directx\기능대회3학년\SkillContest3\EmptyProject\Release\EmptyProject.exe

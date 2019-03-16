@@ -77,7 +77,7 @@ void Player::Update()
 		effectVec3.z = -moveVector.z;
 		float pScale = GetRandomNumber<int>(20, 40);
 		float pRotate = GetRandomNumber<int>(0, 180);
-		particle->ParticleInit({ pos.x, pos.y - 2.5f, pos.z }, pRotate, pScale * 0.001f, effectVec3, 0.15f);
+		particle->ParticleInit({ pos.x, pos.y - 2.5f, pos.z }, { 0, pRotate, 0 }, pScale * 0.001f, effectVec3, 0.15f, 5.0f, 0.6f);
 		particle->isActive = true;
 	}
 	rotate.y = Lerp<float>(rotate.y, smoothRotate, 0.1f);

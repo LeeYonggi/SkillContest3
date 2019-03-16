@@ -9,6 +9,7 @@ enum PLAYERARM_STATE
 	PLAYERARM_IDLE,
 	PLAYERARM_88MM
 };
+class Particle;
 class PlayerArm :
 	public Object
 {
@@ -20,6 +21,7 @@ private:
 	Player *player;
 	PLAYERARM_STATE armState;
 	vector<PlayerAttack*> playerAttack;
+	Particle *shootParticle;
 	bool isFront;
 
 

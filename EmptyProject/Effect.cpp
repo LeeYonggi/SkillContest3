@@ -13,7 +13,6 @@ Effect::Effect(Vector3 _pos, Vector3 _moveVector, Vector3 _scale, bool _isBilllb
 	animeTexture = IMAGEMANAGER->AddAnimeTexture(route, low, high);
 	mesh = MESHMANAGER->AddMeshLoader("Plane", L"./Resource/Effect/dust.obj");
 	endTime = _endTime;
-	rotate.x = -90;
 	color.a = 1.0f;
 	speed = 10.0f;
 	animeFrame = 0;

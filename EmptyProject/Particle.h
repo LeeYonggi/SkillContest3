@@ -21,6 +21,8 @@ public:
 	string route;
 	int low;
 	int high;
+	float animeSpeed;
+	float endTime;
 
 public:
 	virtual void Init()		override;
@@ -29,6 +31,6 @@ public:
 	virtual void Release()	override;
 
 public:
-	void ParticleInit(Vector3 _pos, float rotate, float scale, Vector3 _moveVector, float _startFrame);
+	void ParticleInit(Vector3 _pos, Vector3 rotate, float scale, Vector3 _moveVector, float _startFrame, float _animeSpeed, float _endTime);
 };
 
