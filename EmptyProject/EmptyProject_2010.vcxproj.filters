@@ -78,6 +78,12 @@
     <Filter Include="Object\Particle">
       <UniqueIdentifier>{fad439f2-9cb3-45c1-9004-272c3133db9d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object\Enemy">
+      <UniqueIdentifier>{5b60ea96-6323-4881-b0a1-6f6ee7eb61e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Enemy\AirEnemy1">
+      <UniqueIdentifier>{761dffac-cbba-43e8-a87d-585817d5074b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="DXUT\Optional\directx.ico">
@@ -207,6 +213,12 @@
     <ClCompile Include="Particle.cpp">
       <Filter>Object\Particle</Filter>
     </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Object\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="AirEnemy1.cpp">
+      <Filter>Object\Enemy\AirEnemy1</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -279,6 +291,12 @@
     </ClInclude>
     <ClInclude Include="Particle.h">
       <Filter>Object\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Object\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="AirEnemy1.h">
+      <Filter>Object\Enemy\AirEnemy1</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

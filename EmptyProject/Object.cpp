@@ -155,3 +155,10 @@ float Object::Billboarding(Vector3 p1)
 	p1.z = p1.y;
 	return GetRotateToVec3(temp, p1);
 }
+
+Vector3 Object::GetTargetVec3(Vector3 p1, Vector3 target)
+{
+	Vector3 temp = target - p1;
+	D3DXVec3Normalize(&temp, &temp);
+	return temp;
+}

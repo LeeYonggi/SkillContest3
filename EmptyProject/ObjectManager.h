@@ -31,6 +31,7 @@ public:
 	void Update();
 	void Render();
 	void Release();
+	list<Object*>* GetObjects(OBJ_KINDS kind);
 	template<class T>
 	T* AddObject(OBJ_KINDS state, T *obj)
 	{

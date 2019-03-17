@@ -21,8 +21,9 @@ private:
 	Player *player;
 	PLAYERARM_STATE armState;
 	vector<PlayerAttack*> playerAttack;
-	Particle *shootParticle;
+	vector<Particle*> shootParticle;
 	bool isFront;
+	float frontRotate;
 
 
 public:

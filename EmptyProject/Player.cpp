@@ -39,7 +39,7 @@ void Player::Init()
 	animeMesh.push_back(MESHMANAGER->AddMeshAnime("Player_Idle", L"./Resource/Player/Idle/Body/Player_Idle%d.obj", 0, ANIMEFRAME));
 	animeMesh.push_back(MESHMANAGER->AddMeshAnime("Player_Move", L"./Resource/Player/Move/Body/Player_Move%d.obj", 0, ANIMEFRAME));
 	animeMesh.push_back(MESHMANAGER->AddMeshAnime("Player_120MM", L"./Resource/Player/Idle/Body/Player_Idle%d.obj", 0, ANIMEFRAME));
-	playerAttack.push_back(new PlayerAttack(3, 6));
+	playerAttack.push_back(new PlayerAttack(3, 6, OBJGRAVITY + 0.02));
 
 	particle = OBJECTMANAGER->AddObject(OBJ_EFFECT, new Particle("./Resource/Effect/Dust/dust_%d.png", 1, 4, PARTICLE_KIND::STRAIGHT));
 	particle->isActive = false;
@@ -75,7 +75,7 @@ void Player::Update()
 		Vector3 effectVec3 = moveVector;
 		effectVec3.x = -moveVector.x;
 		effectVec3.z = -moveVector.z;
-		float pScale = GetRandomNumber<int>(20, 40);
+		float pScale  = GetRandomNumber<int>(20, 40);
 		float pRotate = GetRandomNumber<int>(0, 180);
 		particle->ParticleInit({ pos.x, pos.y - 2.5f, pos.z }, { 0, pRotate, 0 }, pScale * 0.001f, effectVec3, 0.15f, 5.0f, 0.6f);
 		particle->isActive = true;

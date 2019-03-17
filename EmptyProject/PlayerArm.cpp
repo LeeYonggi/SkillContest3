@@ -9,6 +9,7 @@
 PlayerArm::PlayerArm(Player* _player)
 {
 	player = _player;
+	frontRotate = 0;
 }
 
 PlayerArm::~PlayerArm()
@@ -26,11 +27,15 @@ void PlayerArm::Init()
 	animeMesh.push_back(MESHMANAGER->AddMeshAnime("Player_Arm_88MM", L"./Resource/Player/Attack/Arm/88MM/Player_Attack_Arm%d.obj", 0, 20));
 
 	armState = PLAYERARM_STATE::PLAYERARM_IDLE;
-	playerAttack.push_back(new PlayerAttack(2, 3));
+	playerAttack.push_back(new PlayerAttack(2, 3, 0));
+	playerAttack.push_back(new PlayerAttack(2, 3, 0));
 	isFront = true;
-	shootParticle = OBJECTMANAGER->AddObject(OBJ_KINDS::OBJ_EFFECT, 
-		new Particle("./Resource/Effect/FastSpeed/effect_%d.png", 1, 5, PARTICLE_KIND::STRAIGHT));
-	shootParticle->isActive = false;
+	shootParticle.push_back(OBJECTMANAGER->AddObject(OBJ_KINDS::OBJ_EFFECT,
+		new Particle("./Resource/Effect/FastSpeed/effect_%d.png", 1, 5, PARTICLE_KIND::STRAIGHT)));
+	shootParticle.push_back(OBJECTMANAGER->AddObject(OBJ_KINDS::OBJ_EFFECT,
+		new Particle("./Resource/Effect/FastSpeed/effect_%d.png", 1, 5, PARTICLE_KIND::STRAIGHT)));
+	for(int i = 0; i < 2; i++)
+		shootParticle[i]->isActive = false;
 
 	ArmInit();
 }
@@ -40,15 +45,21 @@ void PlayerArm::Update()
 	ArmInit();
 	StateUpdate();
 
-	for (int i = 0; i < playerAttack.size(); ++i)
+	for (int i = 0; i < 2; ++i)
 	{
 		Vector3 tempPos = { 0, 0, 0 };
-		tempPos.x = pos.x + GetVec3ToRotate(rotate.y).x * 1.5f;
-		tempPos.y = pos.y + GetVec3ToRotate(rotate.z + 110).z * 1.5f;
-		tempPos.z = pos.z + GetVec3ToRotate(rotate.y).z * 1.5f;
+		tempPos.x = pos.x + GetVec3ToRotate(rotate.y - 40 + i * 80).x * 2.0f;
+		tempPos.y = pos.y + GetVec3ToRotate(-rotate.z + 110).z * 2.0f;
+		tempPos.z = pos.z + GetVec3ToRotate(rotate.y - 40 + i * 80).z * 2.0f;
 		Vector3 tempVec3 = { 0, 0, 0 };
-		tempVec3.x = GetVec3ToRotate(rotate.y).x * 0.2f;
-		tempVec3.z = GetVec3ToRotate(rotate.y).z * 0.2f;
+		tempVec3.x = GetVec3ToRotate(rotate.y).x * 0.3f;
+		tempVec3.y = GetVec3ToRotate(-rotate.z + 90).z * 0.3f;
+		tempVec3.z = GetVec3ToRotate(rotate.y).z * 0.3f;
+		if (!isFront)
+		{
+			tempVec3.x = 0;
+			tempVec3.z = 0;
+		}
 		playerAttack[i]->AttackUpdate(tempPos, tempVec3, BULLET_STATE::BULLET_88MM);
 	}
 	frame += ELTIME * 15;
@@ -74,7 +85,11 @@ void PlayerArm::ArmInit()
 	rotate = player->rotate;
 	scale = player->scale;
 	color = player->color;
-
+	if(isFront)
+		frontRotate = Lerp<float>(frontRotate, 0, 0.1f);
+	else
+		frontRotate = Lerp<float>(frontRotate, 90, 0.1f);
+	rotate.z = frontRotate;
 }
 
 void PlayerArm::StateUpdate()
@@ -86,27 +101,43 @@ void PlayerArm::StateUpdate()
 	case PLAYERARM_IDLE:
 		if (INPUTMANAGER->KeyDown('W'))
 		{
-			playerAttack[0]->Attack();
+			for(int i = 0; i < 2; i++)
+				playerAttack[i]->Attack();
 			armState = PLAYERARM_88MM;
 			frame = 0;
 		}
 		break;
 	case PLAYERARM_88MM:
-		if (playerAttack[0]->isShootStart == false)
-			playerAttack[0]->Attack();
+		for (int i = 0; i < 2; i++)
+		{
+			if (playerAttack[i]->isShootStart == false)
+				playerAttack[i]->Attack();
+		}
+		if (INPUTMANAGER->KeyDown('2'))
+		{
+			isFront = !isFront;
+		}
+		for (int i = 0; i < 2; i++)
+		{
+			tempPos.x = pos.x + GetVec3ToRotate(rotate.y - 40 + i * 80).x * 2.0f;
+			tempPos.y = pos.y + GetVec3ToRotate(-rotate.z + 110).z * 2.0f;
+			tempPos.z = pos.z + GetVec3ToRotate(rotate.y - 40 + i * 80).z * 2.0f;
+			shootParticle[i]->isActive = true;
+			tempRY = (int)rotate.y % 360;
+			if (tempRY > 90 && tempRY <= 270)
+				tempRY -= 180;
+			shootParticle[i]->ParticleInit(tempPos, { tempRY - 90, 0, 0 }, 0.05f, { 0, 0, 0 }, 0.6f, 10.0f, 0.5f);
+		}
 		if (INPUTMANAGER->KeyDown('W'))
 		{
-			shootParticle->isActive = false;
+			for (int i = 0; i < 2; i++)
+			{
+				shootParticle[i]->isActive = false;
+				shootParticle[i]->isActive = false;
+			}
 			armState = PLAYERARM_IDLE;
+			frame = 0;
 		}
-		tempPos.x = pos.x + GetVec3ToRotate(rotate.y).x * 1.5f;
-		tempPos.y = pos.y + GetVec3ToRotate(rotate.z + 110).z * 1.5f;
-		tempPos.z = pos.z + GetVec3ToRotate(rotate.y).z * 1.5f;
-		shootParticle->isActive = true;
-		tempRY = (int)rotate.y % 360;
-		if (tempRY > 90 && tempRY <= 270)
-			tempRY -= 180;
-		shootParticle->ParticleInit(tempPos, { -90, tempRY, 0 }, 0.03f, {0, 0, 0}, 0.3f, 10.0f, 0.5f);
 		break;
 	default:
 		break;

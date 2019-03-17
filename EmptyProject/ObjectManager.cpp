@@ -66,3 +66,11 @@ void ObjectManager::Release()
 	}
 	m_Objects.clear();
 }
+
+list<Object*>* ObjectManager::GetObjects(OBJ_KINDS kind)
+{
+	auto iter = m_Objects.find(kind);
+	if (iter != m_Objects.end()) return iter->second;
+
+	return nullptr;
+}

@@ -1,4 +1,1 @@
-﻿  PlayerArm.cpp
-d:\programming\pj\directx\기능대회3학년\skillcontest3\emptyproject\playerarm.cpp(43): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-Background.obj : warning LNK4075: '/EDITANDCONTINUE'이(가) '/SAFESEH' 사양으로 인해 무시됩니다.
-  EmptyProject_2010.vcxproj -> D:\Programming\PJ\Directx\기능대회3학년\SkillContest3\EmptyProject\Debug\EmptyProject.exe
+﻿  EmptyProject_2010.vcxproj -> D:\Programming\PJ\SkillContest3\EmptyProject\Debug\EmptyProject.exe

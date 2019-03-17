@@ -40,5 +40,6 @@ public:
 	void PixelGroundCollision(Texture *tex1, Texture* tex2, Vector2 p1);
 	bool GetPointCollision(Texture *tex1, Vector2 *p1, Vector2 p2);
 	float Billboarding(Vector3 p1);
+	Vector3 GetTargetVec3(Vector3 p1, Vector3 target);
 };
 
