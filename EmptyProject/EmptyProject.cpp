@@ -5,6 +5,7 @@
 //--------------------------------------------------------------------------------------
 #include "DXUT.h"
 #include "resource.h"
+#include <time.h>
 
 #ifdef UNICODE
 #pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console") 
@@ -128,7 +129,7 @@ INT WINAPI wWinMain( HINSTANCE, HINSTANCE, LPWSTR, int )
 #if defined(DEBUG) | defined(_DEBUG)
     _CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
 #endif
-
+	srand(time(NULL));
     // Set the callback functions
     DXUTSetCallbackD3D9DeviceAcceptable( IsD3D9DeviceAcceptable );
     DXUTSetCallbackD3D9DeviceCreated( OnD3D9CreateDevice );

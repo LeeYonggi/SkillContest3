@@ -24,6 +24,7 @@ private:
 	vector<Particle*> shootParticle;
 	bool isFront;
 	float frontRotate;
+	int damage;
 
 
 public:

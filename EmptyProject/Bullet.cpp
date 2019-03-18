@@ -3,9 +3,10 @@
 
 #include "Particle.h"
 #include "Background.h"
+#include "Effect.h"
 
 
-Bullet::Bullet(Vector3 nowPos, Vector3 _moveVector, BULLET_STATE state, float _gravity)
+Bullet::Bullet(Vector3 nowPos, Vector3 _moveVector, BULLET_STATE state, float _gravity, int _damage)
 {
 	pos = nowPos;
 	moveVector = _moveVector;
@@ -13,11 +14,15 @@ Bullet::Bullet(Vector3 nowPos, Vector3 _moveVector, BULLET_STATE state, float _g
 	scale = { 0.05f, 0.05f, 0.05f };
 	gravity = _gravity;
 	velocity = 0.5f;
+	damage = _damage;
+	particle = nullptr;
 }
 
 Bullet::~Bullet()
 {
 	animeTexture.clear();
+	if(particle)
+		particle->isDestroy = true;
 }
 
 void Bullet::Init()
@@ -34,6 +39,11 @@ void Bullet::Init()
 		mesh = MESHMANAGER->AddMeshLoader("Plane", L"./Resource/Effect/dust.obj");
 		animeTexture = IMAGEMANAGER->AddAnimeTexture("./Resource/Bullet/88MM/88MM.png", 0, 0);
 		scale = { 0.01f, 0.01f, 0.01f };
+		break;
+	case BULLET_ENEMY:
+		speed = 6;
+		animeMesh.push_back(MESHMANAGER->AddMeshAnime("EnemyBullet", L"./Resource/Enemy/enemy_attack/Enemy_Attack%d.obj", 0, 20));
+		scale = { 0.1f, 0.1f, 0.1f};
 		break;
 	default:
 		break;
@@ -66,27 +76,28 @@ void Bullet::Update()
 		effectScale = GetRandomNumber<int>(20, 50);
 		particle->isActive = true;
 		particle->ParticleInit(pos, { -90, 0, randY }, effectScale * 0.001f, effectMoveVector, 0.01f, 2.0f, 1.0f);
-		if (GetPixelCollision(dynamic_cast<Background*>(*iter)->minimap2, { pos.x, pos.y }, { 0, 0 }))
-		{
-			particle->isActive = false;
-		}
-		
+
 		break;
 	case BULLET_88MM:
 		rotate.x = Billboarding(CAMERAMANAGER->GetCamera()->eye);
+		break;
+	case BULLET_ENEMY:
+
 		break;
 	default:
 		break;
 	}
 	if (GetPixelCollision(dynamic_cast<Background*>(*iter)->minimap2, { pos.x, pos.y }, { 0, 0 }))
 	{
-		isDestroy = true;
+		DestroyBullet();
 	}
 	if (pos.x > 700 || pos.x < -100 ||
 		pos.y > 100 || pos.y < -100 ||
 		pos.z > 300 || pos.z < -300)
 		isDestroy = true;
 
+	if (frame > 10.0f)
+		isDestroy = true;
 	frame += ELTIME;
 }
 
@@ -100,6 +111,9 @@ void Bullet::Render()
 	case BULLET_88MM:
 		MESHMANAGER->RenderEffect(mesh, animeTexture[0], pos, rotate, scale);
 		break;
+	case BULLET_ENEMY:
+		MESHMANAGER->RenderAlphaMesh(animeMesh[0][(int)frame % 20], pos, rotate, scale);
+		break;
 	default:
 		break;
 	}
@@ -107,4 +121,24 @@ void Bullet::Render()
 
 void Bullet::Release()
 {
+}
+
+void Bullet::DestroyBullet()
+{
+	Effect *obj;
+	switch (bulletState)
+	{
+	case BULLET_120MM:
+		obj = OBJECTMANAGER->AddObject(OBJ_EFFECT, new Effect({ pos.x, pos.y + 0.5f, pos.z}, { 0, 0, 0 }, { 0.1f, 0.1f, 0.1f }, true, 0.7f,
+			"./Resource/Effect/bomb_effect_2/bomb_effect_2_%d.png", 1, 5));
+		obj->animeSpeed = 10.0f;
+		break;
+	case BULLET_88MM:
+		break;
+	case BULLET_ENEMY:
+		break;
+	default:
+		break;
+	}
+	isDestroy = true;
 }

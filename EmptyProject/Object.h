@@ -18,6 +18,7 @@ public:
 	CMeshLoader *mesh;
 	float velocity;
 	float gravity;
+	float radius;
 	
 
 protected:
@@ -41,5 +42,6 @@ public:
 	bool GetPointCollision(Texture *tex1, Vector2 *p1, Vector2 p2);
 	float Billboarding(Vector3 p1);
 	Vector3 GetTargetVec3(Vector3 p1, Vector3 target);
+	bool GetCircleCollision(Vector3 p1, Vector3 p2, float r1, float r2);
 };
 

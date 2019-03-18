@@ -7,11 +7,13 @@
 #include "Background.h"
 #include "Effect.h"
 #include "Particle.h"
+#include "Item.h"
 
 
 Player::Player(Background* _background)
 {
 	background = _background;
+	particle = nullptr;
 }
 
 Player::~Player()
@@ -21,6 +23,8 @@ Player::~Player()
 		SAFE_DELETE(iter);
 	}
 	playerAttack.clear();
+	if(particle)
+		particle->isDestroy = true;
 }
 
 void Player::Init()
@@ -33,23 +37,31 @@ void Player::Init()
 	rotate = { 0, 90, 0 };
 	smoothRotate = 90.0f;
 	moveVector = { 0.2f, 0.0f, 0.0f };
+	jumpCount = 1;
 	isJump = false;
 	pState = PLAYER_STATE::PLAYER_IDLE;
-
+	for (int i = 0; i < ITEM_KINDS::NEWCLEAR; ++i)
+		itemCount.push_back(1);
+	isSpeedUp = false;
+	hp = 3;
+	shield = MESHMANAGER->AddMeshLoader("Run_Effect", L"./Resource/Effect/run_effect_1/run_effect.obj");
 	animeMesh.push_back(MESHMANAGER->AddMeshAnime("Player_Idle", L"./Resource/Player/Idle/Body/Player_Idle%d.obj", 0, ANIMEFRAME));
 	animeMesh.push_back(MESHMANAGER->AddMeshAnime("Player_Move", L"./Resource/Player/Move/Body/Player_Move%d.obj", 0, ANIMEFRAME));
 	animeMesh.push_back(MESHMANAGER->AddMeshAnime("Player_120MM", L"./Resource/Player/Idle/Body/Player_Idle%d.obj", 0, ANIMEFRAME));
 	playerAttack.push_back(new PlayerAttack(3, 6, OBJGRAVITY + 0.02));
+	texture = IMAGEMANAGER->AddTexture("bb", "./Resource/UI/ui.png");
 
 	particle = OBJECTMANAGER->AddObject(OBJ_EFFECT, new Particle("./Resource/Effect/Dust/dust_%d.png", 1, 4, PARTICLE_KIND::STRAIGHT));
 	particle->isActive = false;
+	radius = 1.5f;
 }
 
 void Player::Update()
 {
 	bool isControl = false;
+	ItemUpdate();
 
-	if (isJump == true)
+	if (isJump)
 	{
 		velocity -= gravity;
 		pos.y += velocity;
@@ -61,7 +73,11 @@ void Player::Update()
 		}
 	}
 	else
+	{
 		PixelGroundCollision(background->minimap1, background->minimap2, { background->pos.x, background->pos.z });
+		if (velocity == 0 && jumpCount == 0)
+			jumpCount = 1;
+	}
 
 	Vector3 temp = PlayerController(&isControl);
 	StateUpdate(isControl);
@@ -82,8 +98,7 @@ void Player::Update()
 	}
 	rotate.y = Lerp<float>(rotate.y, smoothRotate, 0.1f);
 
-	for(int i = 0; i < playerAttack.size(); ++i)
-		playerAttack[0]->AttackUpdate(pos, moveVector, BULLET_STATE::BULLET_120MM);
+	playerAttack[0]->AttackUpdate(pos, moveVector, BULLET_STATE::BULLET_120MM, 2);
 
 	frame += ELTIME * 15;
 	if (frame >= animeMesh[0].size())
@@ -93,6 +108,9 @@ void Player::Update()
 void Player::Render()
 {
 	MESHMANAGER->RenderMesh(animeMesh[pState][(int)frame], pos, { rotate.x, rotate.y - 90, -rotate.z } , scale);
+	if(isSpeedUp == true)
+		MESHMANAGER->RenderAlphaMesh(shield, pos, { rotate.x, rotate.y, rotate.z }, scale * 0.7f);
+	IMAGEMANAGER->DrawTexture(texture, {640, 360});
 }
 
 void Player::Release()
@@ -126,8 +144,12 @@ Vector3 Player::PlayerController(bool *param)
 	}
 	if (INPUTMANAGER->KeyDown(VK_SPACE) && isJump == false)
 	{
-		isJump = true;
-		velocity = 0.5f;
+		if(jumpCount > 0)
+		{
+			isJump = true;
+			velocity = 0.5f;
+			jumpCount -= 1;
+		}
 	}
 	return temp;
 }
@@ -156,5 +178,31 @@ void Player::StateUpdate(bool isMove)
 		break;
 	default:
 		break;
+	}
+}
+
+void Player::ItemUpdate()
+{
+	auto iter = OBJECTMANAGER->GetObjects(OBJ_ITEM);
+	for (auto _iter = iter->begin(); _iter != iter->end(); ++_iter)
+	{
+		if ((*_iter)->GetCircleCollision(pos, (*_iter)->pos, radius, (*_iter)->radius))
+		{
+			itemCount[dynamic_cast<Item*>((*_iter))->GetItemKind()] += 1;
+			(*_iter)->isDestroy = true;
+		}
+	}
+
+	if (INPUTMANAGER->KeyDown('1') && itemCount[0] > 0)
+	{
+		itemCount[0] -= 1;
+		isSpeedUp = true;
+		speed = 0.4f;
+		speedFrame = timeGetTime() + 1000;
+	}
+	if (speedFrame < timeGetTime() && isSpeedUp)
+	{
+		isSpeedUp = false;
+		speed = 0.2f;
 	}
 }

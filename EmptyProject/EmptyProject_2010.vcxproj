@@ -392,6 +392,7 @@
     <ClCompile Include="ImageManager.cpp" />
     <ClCompile Include="InGameScene.cpp" />
     <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="Item.cpp" />
     <ClCompile Include="LoadScene.cpp" />
     <ClCompile Include="MainProc.cpp" />
     <ClCompile Include="MeshLoader.cpp" />
@@ -404,6 +405,7 @@
     <ClCompile Include="PlayerAttack.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SkyBox.cpp" />
+    <ClCompile Include="Stone.cpp" />
     <ClCompile Include="SvCamera.cpp" />
     <ClCompile Include="Utility.cpp" />
     <ClInclude Include="AirEnemy1.h" />
@@ -417,6 +419,7 @@
     <ClInclude Include="ImageManager.h" />
     <ClInclude Include="InGameScene.h" />
     <ClInclude Include="InputManager.h" />
+    <ClInclude Include="Item.h" />
     <ClInclude Include="LoadScene.h" />
     <ClInclude Include="MainProc.h" />
     <ClInclude Include="MeshLoader.h" />
@@ -431,6 +434,7 @@
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="SkyBox.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Stone.h" />
     <ClInclude Include="SvCamera.h" />
     <ClInclude Include="Utility.h" />
     <None Include="DXUT\Optional\directx.ico" />

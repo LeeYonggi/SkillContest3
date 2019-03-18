@@ -16,7 +16,7 @@ public:
 	bool isShoot;
 
 public:
-	void AttackUpdate(Vector3 _pos, Vector3 _moveVector, BULLET_STATE state);
+	void AttackUpdate(Vector3 _pos, Vector3 _moveVector, BULLET_STATE state, int damage);
 	void Attack();
 
 };

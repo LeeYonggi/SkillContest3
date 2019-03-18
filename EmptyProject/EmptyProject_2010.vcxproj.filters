@@ -84,6 +84,12 @@
     <Filter Include="Object\Enemy\AirEnemy1">
       <UniqueIdentifier>{761dffac-cbba-43e8-a87d-585817d5074b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object\Enemy\Stone">
+      <UniqueIdentifier>{89483cbf-952e-4566-bf1a-c1f49a66571d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Item">
+      <UniqueIdentifier>{30d2fd46-a2f0-4451-a3ba-c36130e7bce0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="DXUT\Optional\directx.ico">
@@ -219,6 +225,12 @@
     <ClCompile Include="AirEnemy1.cpp">
       <Filter>Object\Enemy\AirEnemy1</Filter>
     </ClCompile>
+    <ClCompile Include="Stone.cpp">
+      <Filter>Object\Enemy\Stone</Filter>
+    </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>Object\Item</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -297,6 +309,12 @@
     </ClInclude>
     <ClInclude Include="AirEnemy1.h">
       <Filter>Object\Enemy\AirEnemy1</Filter>
+    </ClInclude>
+    <ClInclude Include="Stone.h">
+      <Filter>Object\Enemy\Stone</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>Object\Item</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

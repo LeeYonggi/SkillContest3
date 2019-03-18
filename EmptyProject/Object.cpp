@@ -17,6 +17,7 @@ Object::Object()
 	mesh = nullptr;
 	velocity = 0;
 	gravity = OBJGRAVITY;
+	radius = 1.0f;
 }
 
 
@@ -161,4 +162,15 @@ Vector3 Object::GetTargetVec3(Vector3 p1, Vector3 target)
 	Vector3 temp = target - p1;
 	D3DXVec3Normalize(&temp, &temp);
 	return temp;
+}
+
+bool Object::GetCircleCollision(Vector3 p1, Vector3 p2, float r1, float r2)
+{
+	Vector3 temp = p1 - p2;
+	temp.x = temp.x * temp.x;
+	temp.y = temp.y * temp.y;
+	temp.z = temp.z * temp.z;
+	float length = temp.x + temp.y;
+	float d = length + temp.z;
+	return (sqrt(length) < r1 + r2);
 }

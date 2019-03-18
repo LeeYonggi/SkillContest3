@@ -25,7 +25,13 @@ private:
 	PLAYER_STATE pState;
 	Background *background;
 	Particle *particle;
+	vector<int> itemCount;
+	CMeshLoader *shield;
+	bool isSpeedUp;
+	int jumpCount;
 	bool isJump;
+	float speedFrame;
+	int hp;
 
 public:
 	virtual void Init()		override;
@@ -36,5 +42,6 @@ public:
 public:
 	Vector3 PlayerController(bool *param);
 	void StateUpdate(bool isMove);
+	void ItemUpdate();
 };
 

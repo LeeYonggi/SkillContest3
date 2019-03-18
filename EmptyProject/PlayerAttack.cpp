@@ -11,7 +11,7 @@ PlayerAttack::PlayerAttack(float _startFrame, float _delay, float _gravity)
 	isShoot = false;
 }
 
-void PlayerAttack::AttackUpdate(Vector3 _pos, Vector3 _moveVector, BULLET_STATE state)
+void PlayerAttack::AttackUpdate(Vector3 _pos, Vector3 _moveVector, BULLET_STATE state, int damage)
 {
 	if (isShootStart)
 	{
@@ -27,7 +27,10 @@ void PlayerAttack::AttackUpdate(Vector3 _pos, Vector3 _moveVector, BULLET_STATE 
 	if (frame >= startFrame && isShoot == false)
 	{
 		isShoot = true;
-		OBJECTMANAGER->AddObject(OBJ_PBULLET, new Bullet(_pos, _moveVector, state, gravity));
+		if(state == BULLET_STATE::BULLET_ENEMY)
+			OBJECTMANAGER->AddObject(OBJ_EBULLET, new Bullet(_pos, _moveVector, state, gravity, damage));
+		else
+			OBJECTMANAGER->AddObject(OBJ_PBULLET, new Bullet(_pos, _moveVector, state, gravity, damage));
 	}
 
 }

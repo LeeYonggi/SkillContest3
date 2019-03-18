@@ -19,12 +19,14 @@ PlayerArm::~PlayerArm()
 		SAFE_DELETE(iter);
 	}
 	playerAttack.clear();
+	for (int i = 0; i < shootParticle.size(); ++i)
+		shootParticle[i]->isDestroy = true;
 }
 
 void PlayerArm::Init()
 {
 	animeMesh.push_back(MESHMANAGER->AddMeshAnime("Player_Arm_Idle", L"./Resource/Player/Idle/Arm/Player_Idle%d.obj", 0, ANIMEFRAME));
-	animeMesh.push_back(MESHMANAGER->AddMeshAnime("Player_Arm_88MM", L"./Resource/Player/Attack/Arm/88MM/Player_Attack_Arm%d.obj", 0, 20));
+	animeMesh.push_back(MESHMANAGER->AddMeshAnime("Player_Arm_88MM", L"./Resource/Player/Attack/Arm/88MM/Player_Attack_Arm%d.obj", 0, ANIMEFRAME));
 
 	armState = PLAYERARM_STATE::PLAYERARM_IDLE;
 	playerAttack.push_back(new PlayerAttack(2, 3, 0));
@@ -36,6 +38,7 @@ void PlayerArm::Init()
 		new Particle("./Resource/Effect/FastSpeed/effect_%d.png", 1, 5, PARTICLE_KIND::STRAIGHT)));
 	for(int i = 0; i < 2; i++)
 		shootParticle[i]->isActive = false;
+	damage = 1;
 
 	ArmInit();
 }
@@ -60,7 +63,7 @@ void PlayerArm::Update()
 			tempVec3.x = 0;
 			tempVec3.z = 0;
 		}
-		playerAttack[i]->AttackUpdate(tempPos, tempVec3, BULLET_STATE::BULLET_88MM);
+		playerAttack[i]->AttackUpdate(tempPos, tempVec3, BULLET_STATE::BULLET_88MM, damage);
 	}
 	frame += ELTIME * 15;
 	if (frame >= animeMesh[armState].size())

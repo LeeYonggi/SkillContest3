@@ -5,7 +5,7 @@ class AirEnemy1 :
 	public Enemy
 {
 public:
-	AirEnemy1(Player *_player);
+	AirEnemy1(Player *_player, Vector3 _pos);
 	virtual ~AirEnemy1();
 
 public:

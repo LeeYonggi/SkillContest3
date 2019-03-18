@@ -7,14 +7,17 @@ class Enemy :
 	public Object
 {
 public:
-	Enemy(Player *_player);
+	Enemy(Player *_player, float _bulletDelay, Vector3 _initVector);
 	virtual ~Enemy();
 
 protected:
 	PlayerAttack *eAttack;
 	Player *player;
 	Vector3 moveVector;
+	Vector3 initVector;
 	float speed;
+	int hp;
+	vector<bool> isEffect;
 
 public:
 	virtual void Init()		override;
@@ -24,5 +27,8 @@ public:
 
 public:
 	void AirEnemyMove();
+	bool AirEnemyAttack();
+	void EnemyAttacked(float animeSpeed, float endTime);
+	bool IsCameraZone();
 };
 

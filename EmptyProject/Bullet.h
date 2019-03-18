@@ -4,14 +4,15 @@
 enum BULLET_STATE
 {
 	BULLET_120MM,
-	BULLET_88MM
+	BULLET_88MM,
+	BULLET_ENEMY
 };
 class Particle;
 class Bullet :
 	public Object
 {
 public:
-	Bullet(Vector3 nowPos, Vector3 _moveVector, BULLET_STATE state, float _gravity);
+	Bullet(Vector3 nowPos, Vector3 _moveVector, BULLET_STATE state, float _gravity, int _damage);
 	virtual ~Bullet();
 
 private:
@@ -20,6 +21,7 @@ private:
 	float speed;
 	vector<Texture*> animeTexture;
 	Particle *particle;
+	int damage;
 	float gravity;
 	float velocity;
 
@@ -28,5 +30,11 @@ public:
 	virtual void Update()	override;
 	virtual void Render()	override;
 	virtual void Release()	override;
+
+public: 
+	void DestroyBullet();
+
+public:
+	float GetDamage() { return damage; }
 };
 

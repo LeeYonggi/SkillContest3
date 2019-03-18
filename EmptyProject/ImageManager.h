@@ -29,6 +29,7 @@ private:
 
 public:
 	LPD3DXSPRITE sprite;
+	LPD3DXFONT font;
 	Vector2 camPos;
 	float camScale;
 
@@ -39,6 +40,7 @@ public:
 		float rotate = 0, Vector2 length = { 1, 1 }, Color color = { 255, 255, 255, 255 });
 	void DrawTexture(Texture* texture, Vector2 pos, Vector2 scale = { 1, 1 }, Vector2 camValue = { 1, 1 },
 		float rotate = 0, Vector2 length = { 1, 1 }, Color color = { 255, 255, 255, 255 });
+	void DrawFont(string str, Vector2 pos, Vector2 scale = { 1, 1 }, Color color = { 255, 255, 255, 255 });
 
 	void Release();
 };

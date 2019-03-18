@@ -33,6 +33,8 @@ void Effect::Update()
 	pos += moveVector3 * speed * ELTIME;
 	if (frame > endTime)
 		isDestroy = true;
+	if (isBillboarding)
+		rotate.x = Billboarding(CAMERAMANAGER->GetCamera()->eye);
 	frame += ELTIME;
 	animeFrame = frame * animeSpeed;
 	if (animeFrame >= animeTexture.size())

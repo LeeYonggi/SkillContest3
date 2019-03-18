@@ -5,6 +5,8 @@
 ImageManager::ImageManager()
 {
 	D3DXCreateSprite(DEVICE, &sprite);
+	D3DXCreateFontA(DEVICE, 200, 0, FW_HEAVY, 1, false, DEFAULT_CHARSET,
+		OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "µ¸¿òÃ¼", &font);
 	camScale = 0;
 	camPos = { 0, 0 };
 }
@@ -15,6 +17,7 @@ ImageManager::~ImageManager()
 	Release();
 
 	SAFE_RELEASE(sprite);
+	SAFE_RELEASE(font);
 }
 
 Texture *ImageManager::AddTexture(string name, string route)
@@ -85,6 +88,7 @@ void ImageManager::DrawTexture(Texture* texture, Vector2 pos, Vector2 scale, Vec
 	pos = pos - Vector2(camPos.x * camValue.x, camPos.y * camValue.y) + (pos * camScale * 0.1);
 	D3DXMatrixTranslation(&matT, pos.x, pos.y, 0);
 
+	sprite->Begin(D3DXSPRITE_ALPHABLEND);
 	matW = matS * matR * matT;
 
 	sprite->SetTransform(&matW);
@@ -94,8 +98,22 @@ void ImageManager::DrawTexture(Texture* texture, Vector2 pos, Vector2 scale, Vec
 
 	RECT re = { 0, 0, texture->info.Width * length.x, texture->info.Height * length.y };
 
-	sprite->Begin(D3DXSPRITE_ALPHABLEND);
 	sprite->Draw(texture->tex, &re, &center, nullptr, D3DCOLOR_RGBA(color.r, color.g, color.b, color.a));
+	sprite->End();
+}
+
+void ImageManager::DrawFont(string str, Vector2 pos, Vector2 scale, Color color)
+{
+	RECT re;
+
+	D3DXMATRIX matW, matT, matS;
+	D3DXMatrixScaling(&matS, scale.x, scale.y, 1);
+	D3DXMatrixTranslation(&matT, pos.x, pos.y, 0);
+
+	matW = matS * matT;
+	sprite->Begin(D3DXSPRITE_ALPHABLEND);
+	sprite->SetTransform(&matW);
+	font->DrawTextA(sprite, str.c_str(), -1, &re, DT_NOCLIP, D3DCOLOR_RGBA(color.r, color.g, color.b, color.a));
 	sprite->End();
 }
 
