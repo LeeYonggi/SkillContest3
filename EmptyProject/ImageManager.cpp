@@ -5,8 +5,8 @@
 ImageManager::ImageManager()
 {
 	D3DXCreateSprite(DEVICE, &sprite);
-	D3DXCreateFontA(DEVICE, 200, 0, FW_HEAVY, 1, false, DEFAULT_CHARSET,
-		OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "µ¸¿òÃ¼", &font);
+	D3DXCreateFontA(DEVICE, 50, 0, FW_HEAVY, 1, false, DEFAULT_CHARSET,
+		OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "±¼¸²Ã¼", &font);
 	camScale = 0;
 	camPos = { 0, 0 };
 }
@@ -75,7 +75,7 @@ void ImageManager::DrawTexture(string name, Vector2 pos, Vector2 scale, Vector2 
 
 	RECT re = { 0, 0, iter->second->info.Width * length.x, iter->second->info.Height * length.y };
 
-	sprite->Begin(D3DXSPRITE_ALPHABLEND | D3DXSPRITE_OBJECTSPACE);
+	sprite->Begin(D3DXSPRITE_ALPHABLEND);
 	sprite->Draw(iter->second->tex, &re, &center, nullptr, D3DCOLOR_RGBA(color.r, color.g, color.b, color.a));
 	sprite->End();
 }
@@ -104,7 +104,7 @@ void ImageManager::DrawTexture(Texture* texture, Vector2 pos, Vector2 scale, Vec
 
 void ImageManager::DrawFont(string str, Vector2 pos, Vector2 scale, Color color)
 {
-	RECT re;
+	RECT re = { 0 };
 
 	D3DXMATRIX matW, matT, matS;
 	D3DXMatrixScaling(&matS, scale.x, scale.y, 1);

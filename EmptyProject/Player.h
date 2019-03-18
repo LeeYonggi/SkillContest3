@@ -27,10 +27,13 @@ private:
 	Particle *particle;
 	vector<int> itemCount;
 	CMeshLoader *shield;
+	vector<Texture*> vUpgradeUI;
+	vector<Texture*> windAct;
 	bool isSpeedUp;
 	int jumpCount;
 	bool isJump;
 	float speedFrame;
+	int upgrade;
 	int hp;
 
 public:

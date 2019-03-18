@@ -25,6 +25,7 @@ Player::~Player()
 	playerAttack.clear();
 	if(particle)
 		particle->isDestroy = true;
+	vUpgradeUI.clear();
 }
 
 void Player::Init()
@@ -40,19 +41,27 @@ void Player::Init()
 	jumpCount = 1;
 	isJump = false;
 	pState = PLAYER_STATE::PLAYER_IDLE;
-	for (int i = 0; i < ITEM_KINDS::NEWCLEAR; ++i)
+	for (int i = 0; i <= ITEM_KINDS::NEWCLEAR; ++i)
 		itemCount.push_back(1);
 	isSpeedUp = false;
 	hp = 3;
 	shield = MESHMANAGER->AddMeshLoader("Run_Effect", L"./Resource/Effect/run_effect_1/run_effect.obj");
-	animeMesh.push_back(MESHMANAGER->AddMeshAnime("Player_Idle", L"./Resource/Player/Idle/Body/Player_Idle%d.obj", 0, ANIMEFRAME));
-	animeMesh.push_back(MESHMANAGER->AddMeshAnime("Player_Move", L"./Resource/Player/Move/Body/Player_Move%d.obj", 0, ANIMEFRAME));
-	animeMesh.push_back(MESHMANAGER->AddMeshAnime("Player_120MM", L"./Resource/Player/Idle/Body/Player_Idle%d.obj", 0, ANIMEFRAME));
-	playerAttack.push_back(new PlayerAttack(3, 6, OBJGRAVITY + 0.02));
-	texture = IMAGEMANAGER->AddTexture("bb", "./Resource/UI/ui.png");
+	animeMesh.push_back(MESHMANAGER->AddMeshAnime("Player_Idle",  L"./Resource/Player/Idle/Body/Player_Idle%d.obj", 0, ANIMEFRAME));
+	animeMesh.push_back(MESHMANAGER->AddMeshAnime("Player_Move",  L"./Resource/Player/Move/Body/Player_Move%d.obj", 0, ANIMEFRAME));
+	animeMesh.push_back(MESHMANAGER->AddMeshAnime("Player_Idle",  L"./Resource/Player/Idle/Body/Player_Idle%d.obj", 0, ANIMEFRAME));
+	animeMesh.push_back(MESHMANAGER->AddMeshAnime("Player_Idle2", L"./Resource/Player/idle_1_upgrade/Player_Idle_1_Upgrade%d.obj", 0, ANIMEFRAME));
+	animeMesh.push_back(MESHMANAGER->AddMeshAnime("Player_Move2", L"./Resource/Player/move_1_upgrade/Player_moving_upgrade%d.obj", 0, ANIMEFRAME));
+	animeMesh.push_back(MESHMANAGER->AddMeshAnime("Player_Idle2", L"./Resource/Player/idle_1_upgrade/Player_Idle_1_Upgrade%d.obj", 0, ANIMEFRAME));
+	animeMesh.push_back(MESHMANAGER->AddMeshAnime("Player_Idle3", L"./Resource/Player/Idle_2_upgrade/Player_Idle_2_Upgrade%d.obj", 0, ANIMEFRAME));
+	animeMesh.push_back(MESHMANAGER->AddMeshAnime("Player_Move3", L"./Resource/Player/move_2_upgrade/Player_move_2_Upgrade%d.obj", 0, ANIMEFRAME));
+	animeMesh.push_back(MESHMANAGER->AddMeshAnime("Player_Idle3", L"./Resource/Player/Idle_2_upgrade/Player_Idle_2_Upgrade%d.obj", 0, ANIMEFRAME));
 
+	playerAttack.push_back(new PlayerAttack(3, 6, OBJGRAVITY + 0.02));
+	vUpgradeUI = IMAGEMANAGER->AddAnimeTexture("./Resource/UI/ui_upgrade_%d.png", 1, 3);
+	windAct = IMAGEMANAGER->AddAnimeTexture("./Resource/Effect/run_effect/run_effect_2_%d.png", 1, 4);
 	particle = OBJECTMANAGER->AddObject(OBJ_EFFECT, new Particle("./Resource/Effect/Dust/dust_%d.png", 1, 4, PARTICLE_KIND::STRAIGHT));
 	particle->isActive = false;
+	upgrade = 2;
 	radius = 1.5f;
 }
 
@@ -107,10 +116,22 @@ void Player::Update()
 
 void Player::Render()
 {
-	MESHMANAGER->RenderMesh(animeMesh[pState][(int)frame], pos, { rotate.x, rotate.y - 90, -rotate.z } , scale);
-	if(isSpeedUp == true)
+	MESHMANAGER->RenderMesh(animeMesh[pState + upgrade * 3][(int)frame], pos, { rotate.x, rotate.y - 90, -rotate.z } , scale);
+	if (isSpeedUp == true)
+	{
 		MESHMANAGER->RenderAlphaMesh(shield, pos, { rotate.x, rotate.y, rotate.z }, scale * 0.7f);
-	IMAGEMANAGER->DrawTexture(texture, {640, 360});
+		IMAGEMANAGER->DrawTexture(windAct[(int)frame % windAct.size()], {640, 360});
+	}
+
+	IMAGEMANAGER->DrawTexture("IngameUI", { 640, 360 });
+	IMAGEMANAGER->DrawTexture(vUpgradeUI[upgrade], { 1120, 610 }); 
+	string lifeui = to_string(hp);
+	IMAGEMANAGER->DrawFont(lifeui, { 160, 70 }, { 0.5f, 0.5f });
+	for (int i = 0; i < itemCount.size(); ++i)
+	{
+		string str = to_string(itemCount[i]);
+		IMAGEMANAGER->DrawFont(str, { float(80 + i * 100), 680.0f }, { 0.5f, 0.5f });
+	}
 }
 
 void Player::Release()
